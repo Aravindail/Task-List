@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class Task
 {
@@ -59,27 +61,41 @@ $tasks = [
 Route::get('/', function () {
     return view('welcome');
 });
+//
+//Route::get('/test', function () {
+//    return 'test';
+//});
+//
+//Route::get('/catalog', function (){
+//    return redirect('/');
+//});
+//
+//Route::get('/{product}', function ($product) use($tasks) {
+//    return view('index',[
+//        'product' => $product,
+//        'tasks' => $tasks,
+//    ]);
+//})->name('testing');
+//Route::get('/component', function () {
+//    return redirect()->route('testing');
+//});
 
-Route::get('/test', function () {
-    return 'test';
-});
+Route::get('/tasks', function () use ($tasks) {
+    return view('index', ['tasks' => $tasks]);
+})->name('tasks.list');
 
-Route::get('/catalog', function (){
-    return redirect('/');
-});
+Route::get('/tasks/{id}', function ($id) use ($tasks) {
+    $task = collect($tasks)->firstWhere('id',$id);
 
-Route::get('/{product}', function ($product) use($tasks) {
-    return view('index',[
-        'product' => $product,
-        'tasks' => $tasks,
+    if (!$task) abort(ResponseAlias::HTTP_NOT_FOUND);
+    return view('task', [
+        'id' => $id,
+        'task' => $task
     ]);
-})->name('testing');
+})->name('tasks.element');
 
-Route::get('/component', function (){
-    return redirect()->route('testing');
-});
 
-Route::fallback(function (){
+Route::fallback(function () {
     return 'Go fuck yourself!';
 });
 //GET

@@ -15,11 +15,10 @@
             @endisset
             <div>
                 @forelse($tasks as $task)
-                    <div>
+                    <a href="{{route('tasks.element', ['id'=> $task->id])}}">
                         <div>{{$task->title}}</div>
                         <div>{{$task->description}}</div>
-
-                    </div>
+                    </a>
                 @empty
                     <div>There are no tasks!</div>
                 @endforelse
