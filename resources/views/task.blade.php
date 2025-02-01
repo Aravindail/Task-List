@@ -3,7 +3,7 @@
 @section('title', $task->title)
 @section('content')
     @isset($task)
-        <div>{{$task->description}}</div>
+        <div>{{$task['description']}}</div>
         @if($task->long_description)
             <div>{{$task->long_description}}</div>
         @endif

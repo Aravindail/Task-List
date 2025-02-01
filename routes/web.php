@@ -81,16 +81,14 @@ Route::get('/', function () {
 //});
 
 Route::get('/tasks', function () use ($tasks) {
-    return view('index', ['tasks' => $tasks]);
+    return view('index', [
+        'tasks' => \App\Models\Task::latest()->where('completed', false)->get()
+    ]);
 })->name('tasks.list');
 
-Route::get('/tasks/{id}', function ($id) use ($tasks) {
-    $task = collect($tasks)->firstWhere('id',$id);
-
-    if (!$task) abort(ResponseAlias::HTTP_NOT_FOUND);
+Route::get('/tasks/{id}', function ($id) {
     return view('task', [
-        'id' => $id,
-        'task' => $task
+        'task' => \App\Models\Task::findOrFail($id),
     ]);
 })->name('tasks.element');
 
